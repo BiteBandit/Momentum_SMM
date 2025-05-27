@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SMM Panel - Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #354152;
+      --color: #7e8ba3;
+      --input-bg: #2c3645;
+      --input-color: #fff;
+      --btn-bg: linear-gradient(to right, #8ceabb, #378f7b);
+      --radius: 5px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Helvetica Neue', sans-serif;
+      background-color: var(--bg);
+      color: var(--color);
+    }
+
+    .align {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .grid {
+      display: grid;
+      justify-items: center;
+    }
+
+    .register {
+      background: #1c2532;
+      padding: 40px 30px;
+      border-radius: var(--radius);
+      text-align: center;
+      width: 320px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    .site__logo {
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      margin: 10px 0 30px;
+      font-weight: 500;
+    }
+
+    .form__field {
+      margin-bottom: 15px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      background: var(--input-bg);
+      border: none;
+      border-radius: var(--radius);
+      color: var(--input-color);
+      font-size: 14px;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #ccc;
+      cursor: pointer;
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: var(--btn-bg);
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    #errorMsg {
+      margin-top: 15px;
+      font-size: 13px;
+      min-height: 18px;
+      color: #ff4d4f; /* A nice
+    }
+
+    .link, #forgotPassword {
+     margin-top: 15px;
+     font-size: 13px;
+}
+
+    a {
+    color: #8ceabb;
+    text-decoration: none;
+    cursor: pointer;
+}
+  </style>
+</head>
+<body class="align">
+  <div class="grid align__item">
+    <div class="register">
+      <svg xmlns="http://www.w3.org/2000/svg" class="site__logo" width="56" height="84" viewBox="77.7 214.9 274.7 412">
+        <defs><linearGradient id="a" x1="0%" y1="0%" y2="0%"><stop offset="0%" stop-color="#8ceabb"/><stop offset="100%" stop-color="#378f7b"/></linearGradient></defs>
+        <path fill="url(#a)" d="M215 214.9c-83.6 123.5-137.3 200.8-137.3 275.9 0 75.2 61.4 136.1 137.3 136.1s137.3-60.9 137.3-136.1c0-75.1-53.7-152.4-137.3-275.9z"/>
+      </svg>
+
+      <h2>Momentum SMM Secure Login</h2>
+
+      <form id="loginForm" class="form" autocomplete="off">
+        <div class="form__field">
+          <input type="email" id="email" placeholder="Email" required />
+        </div>
+
+        <div class="form__field password-wrapper">
+          <input type="password" id="password" placeholder="Password" required />
+          <span class="toggle-password" onclick="togglePassword('password', this)">👁️</span>
+        </div>
+
+        <button type="submit" id="loginBtn">Login</button>
+
+        <div id="forgotPassword"><a id="forgotPasswordLink">Forgot Password?</a></div>
+        <div id="errorMsg"></div>
+        <div class="link">Don't have an account? <a href="register.html">Register now</a></div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function togglePassword(fieldId, icon) {
+      const input = document.getElementById(fieldId);
+      if (input.type === "password") {
+        input.type = "text";
+        icon.textContent = "🙈";
+      } else {
+        input.type = "password";
+        icon.textContent = "👁️";
+      }
+    }
+  </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBExQ1NNsKbJfoLrj8X6CSOf0HAX6psh2Y",
+      authDomain: "smm-panel-ec113.firebaseapp.com",
+      projectId: "smm-panel-ec113",
+      storageBucket: "smm-panel-ec113.appspot.com",
+      messagingSenderId: "358406430490",
+      appId: "1:358406430490:web:8fe97be0542fce435896a3"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const form = document.getElementById("loginForm");
+    const errorMsg = document.getElementById("errorMsg");
+    const loginBtn = document.getElementById("loginBtn");
+    const forgotPasswordLink = document.getElementById("forgotPasswordLink");
+
+    function getFriendlyErrorMessage(code) {
+      switch (code) {
+        case "auth/user-not-found": return "No user found with this email.";
+        case "auth/wrong-password": return "Incorrect password.";
+        case "auth/invalid-email": return "Enter a valid email.";
+        case "auth/too-many-requests": return "Too many attempts. Try again later.";
+        default: return "The email or password you entered is incorrect. Please try again.";
+      }
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errorMsg.textContent = "";
+      loginBtn.disabled = true;
+      loginBtn.textContent = "Logging in...";
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        const userDoc = doc(db, "users", user.uid);
+        const snap = await getDoc(userDoc);
+
+        if (snap.exists()) {
+          const data = snap.data();
+          localStorage.setItem("username", data.username || "User");
+          window.location.href = "Loading.html";
+        } else {
+          errorMsg.textContent = "User data not found.";
+          loginBtn.disabled = false;
+          loginBtn.textContent = "Login";
+        }
+      } catch (err) {
+        errorMsg.textContent = getFriendlyErrorMessage(err.code);
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Login";
+      }
+    });
+
+    forgotPasswordLink.addEventListener("click", async () => {
+      const email = document.getElementById("email").value.trim();
+      if (!email) {
+        errorMsg.textContent = "Enter your email first.";
+        return;
+      }
+
+      try {
+        await sendPasswordResetEmail(auth, email);
+        errorMsg.style.color = "lightgreen";
+        errorMsg.textContent = "Reset link sent to your email.";
+      } catch (err) {
+        errorMsg.style.color = "orange";
+        errorMsg.textContent = getFriendlyErrorMessage(err.code);
+      }
+    });
+  </script>
+</body>
+</html>

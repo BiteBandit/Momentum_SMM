@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Loading...</title>
+  <style>
+    :root {
+      --base-bgcolor: #354152;
+      --base-color: #7e8ba3;
+      --base-font-weight: 300;
+      --base-font-size: 1rem;
+      --base-line-height: 1.5;
+      --base-font-family: 'Helvetica Neue', sans-serif;
+      --input-bg: #2c3a4a;
+      --input-border: #4a5a6a;
+      --input-border-focus: #378f7b;
+      --error-color: #e74c3c;
+      --success-color: #2ecc71;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--base-bgcolor);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--base-color);
+      font-family: var(--base-font-family);
+    }
+
+    .loader {
+      animation: spin 1s linear infinite;
+      width: 56px;
+      height: 84px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      color: #8ceabb;
+    }
+  </style>
+</head>
+<body>
+
+  <svg xmlns="http://www.w3.org/2000/svg" class="loader" viewBox="77.7 214.9 274.7 412">
+    <defs>
+      <linearGradient id="a" x1="0%" y1="0%" y2="0%">
+        <stop offset="0%" stop-color="#8ceabb"/>
+        <stop offset="100%" stop-color="#378f7b"/>
+      </linearGradient>
+    </defs>
+    <path fill="url(#a)" d="M215 214.9c-83.6 123.5-137.3 200.8-137.3 275.9 0 75.2 61.4 136.1 137.3 136.1s137.3-60.9 137.3-136.1c0-75.1-53.7-152.4-137.3-275.9z"/>
+  </svg>
+
+  <div class="loading-text">Preparing your dashboard...</div>
+
+  <script>
+    setTimeout(() => {
+      window.location.href = "dashboard.html";
+    }, 10000); // 8 seconds
+  </script>
+
+</body>
+</html>
