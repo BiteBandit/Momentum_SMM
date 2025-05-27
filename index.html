@@ -6,112 +6,152 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
-      --bg: #354152;
-      --color: #7e8ba3;
-      --input-bg: #2c3645;
-      --input-color: #fff;
-      --btn-bg: linear-gradient(to right, #8ceabb, #378f7b);
-      --radius: 5px;
+      --color: #333;
+      --background-color: #ffffff;
+      --primary-color: #378f7b;
+      --primary-color-dark: #2e715f;
+      --error-color: #ff4d4f;
+      --success-color: #4caf50;
+      --font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     }
-
     * {
       box-sizing: border-box;
     }
-
-    html, body {
-      height: 100%;
+    body {
       margin: 0;
-      font-family: 'Helvetica Neue', sans-serif;
-      background-color: var(--bg);
+      padding: 0;
+      font-family: var(--font-family);
+      background-color: var(--background-color);
       color: var(--color);
-    }
-
-    .align {
       display: flex;
-      align-items: center;
       justify-content: center;
-      height: 100%;
+      align-items: center;
+      height: 100vh;
     }
-
-    .grid {
-      display: grid;
-      justify-items: center;
-    }
-
-    .register {
-      background: #1c2532;
-      padding: 40px 30px;
-      border-radius: var(--radius);
-      text-align: center;
-      width: 320px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    }
-
-    .site__logo {
-      margin-bottom: 20px;
-    }
-
-    h2 {
-      margin: 10px 0 30px;
-      font-weight: 500;
-    }
-
-    .form__field {
-      margin-bottom: 15px;
-    }
-
-    input {
+    .align {
       width: 100%;
-      padding: 12px;
-      background: var(--input-bg);
-      border: none;
-      border-radius: var(--radius);
-      color: var(--input-color);
-      font-size: 14px;
+      max-width: 400px;
+      padding: 20px;
     }
-
+    .grid.align__item {
+      background: white;
+      border-radius: 10px;
+      padding: 40px 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      width: 100%;
+    }
+    .site__logo {
+      display: block;
+      margin: 0 auto 20px auto;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: 700;
+      color: var(--primary-color-dark);
+    }
+    form.form {
+      display: flex;
+      flex-direction: column;
+    }
+    .form__field {
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .form__field input[type="email"],
+    .form__field input[type="password"] {
+      width: 100%;
+      padding: 12px 40px 12px 15px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .form__field input[type="email"]:focus,
+    .form__field input[type="password"]:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 8px rgba(55, 143, 123, 0.3);
+    }
+    .password-wrapper {
+      position: relative;
+    }
     .toggle-password {
       position: absolute;
       right: 12px;
       top: 50%;
       transform: translateY(-50%);
-      color: #ccc;
+      cursor: pointer;
+      font-size: 20px;
+      user-select: none;
+      color: var(--primary-color-dark);
+    }
+    .form__field.remember-me {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 15px;
+      color: var(--color);
+      font-size: 14px;
+      user-select: none;
+    }
+    .form__field.remember-me input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
       cursor: pointer;
     }
-
-    .password-wrapper {
-      position: relative;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background: var(--btn-bg);
+    button#loginBtn {
+      background-color: var(--primary-color);
+      color: white;
       border: none;
-      color: #fff;
+      border-radius: 8px;
+      padding: 12px;
       font-size: 16px;
-      border-radius: var(--radius);
       cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button#loginBtn:hover:not(:disabled) {
+      background-color: var(--primary-color-dark);
+    }
+    button#loginBtn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    #forgotPassword {
       margin-top: 10px;
+      text-align: right;
+      font-size: 14px;
     }
-
+    #forgotPassword a {
+      cursor: pointer;
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    #forgotPassword a:hover {
+      text-decoration: underline;
+    }
     #errorMsg {
-      margin-top: 15px;
-      font-size: 13px;
-      min-height: 18px;
-      color: #ff4d4f; /* A nice
+      margin-top: 12px;
+      min-height: 20px;
+      font-size: 14px;
+      color: var(--error-color);
+      text-align: center;
+      font-weight: 600;
     }
-
-    .link, #forgotPassword {
-     margin-top: 15px;
-     font-size: 13px;
-}
-
-    a {
-    color: #8ceabb;
-    text-decoration: none;
-    cursor: pointer;
-}
+    .link {
+      margin-top: 25px;
+      font-size: 14px;
+      text-align: center;
+    }
+    .link a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .link a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body class="align">
@@ -134,6 +174,11 @@
           <span class="toggle-password" onclick="togglePassword('password', this)">👁️</span>
         </div>
 
+        <div class="form__field remember-me">
+          <input type="checkbox" id="rememberMe" />
+          <label for="rememberMe">Remember me</label>
+        </div>
+
         <button type="submit" id="loginBtn">Login</button>
 
         <div id="forgotPassword"><a id="forgotPasswordLink">Forgot Password?</a></div>
@@ -146,19 +191,21 @@
   <script>
     function togglePassword(fieldId, icon) {
       const input = document.getElementById(fieldId);
-      if (input.type === "password") {
-        input.type = "text";
-        icon.textContent = "🙈";
-      } else {
-        input.type = "password";
-        icon.textContent = "👁️";
-      }
+      input.type = input.type === "password" ? "text" : "password";
+      icon.textContent = input.type === "password" ? "👁️" : "🙈";
     }
   </script>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+    import {
+      getAuth,
+      setPersistence,
+      browserLocalPersistence,
+      browserSessionPersistence,
+      signInWithEmailAndPassword,
+      sendPasswordResetEmail
+    } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -178,6 +225,7 @@
     const errorMsg = document.getElementById("errorMsg");
     const loginBtn = document.getElementById("loginBtn");
     const forgotPasswordLink = document.getElementById("forgotPasswordLink");
+    const rememberMeCheckbox = document.getElementById("rememberMe");
 
     function getFriendlyErrorMessage(code) {
       switch (code) {
@@ -191,49 +239,54 @@
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      errorMsg.style.color = "var(--error-color)";
       errorMsg.textContent = "";
       loginBtn.disabled = true;
       loginBtn.textContent = "Logging in...";
 
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
+      const rememberMe = rememberMeCheckbox.checked;
 
       try {
+        const persistenceType = rememberMe ? browserLocalPersistence : browserSessionPersistence;
+        await setPersistence(auth, persistenceType);
+
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        const userDoc = doc(db, "users", user.uid);
-        const snap = await getDoc(userDoc);
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
 
-        if (snap.exists()) {
-          const data = snap.data();
-          localStorage.setItem("username", data.username || "User");
-          window.location.href = "Loading.html";
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          const role = userData.Role || userData.role || "";
+          window.location.href = role.toLowerCase() === "admin" ? "Admin.html" : "Loading.html";
         } else {
           errorMsg.textContent = "User data not found.";
-          loginBtn.disabled = false;
-          loginBtn.textContent = "Login";
         }
       } catch (err) {
         errorMsg.textContent = getFriendlyErrorMessage(err.code);
-        loginBtn.disabled = false;
-        loginBtn.textContent = "Login";
       }
+
+      loginBtn.disabled = false;
+      loginBtn.textContent = "Login";
     });
 
     forgotPasswordLink.addEventListener("click", async () => {
       const email = document.getElementById("email").value.trim();
       if (!email) {
-        errorMsg.textContent = "Enter your email first.";
+        errorMsg.style.color = "var(--error-color)";
+        errorMsg.textContent = "Please enter your email to reset password.";
         return;
       }
 
       try {
         await sendPasswordResetEmail(auth, email);
-        errorMsg.style.color = "lightgreen";
+        errorMsg.style.color = "var(--success-color)";
         errorMsg.textContent = "Reset link sent to your email.";
       } catch (err) {
-        errorMsg.style.color = "orange";
+        errorMsg.style.color = "var(--error-color)";
         errorMsg.textContent = getFriendlyErrorMessage(err.code);
       }
     });

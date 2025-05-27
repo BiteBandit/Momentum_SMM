@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMM Dashboard - New Order</title>
+  <style>
+    :root {
+      --base-bgcolor: #fff;
+      --base-color: #354152;
+      --base-font-weight: 300;
+      --base-font-size: 1rem;
+      --base-line-height: 1.5;
+      --base-font-family: 'Helvetica Neue', sans-serif;
+      --input-bg: #f7f7f7;
+      --input-border: #ccc;
+      --input-border-focus: #378f7b;
+      --error-color: #e74c3c;
+      --success-color: #2ecc71;
+    }
+    body {
+      background-color: var(--base-bgcolor);
+      color: var(--base-color);
+      font-weight: var(--base-font-weight);
+      font-size: var(--base-font-size);
+      font-family: var(--base-font-family);
+      margin: 0;
+      padding: 0;
+      line-height: var(--base-line-height);
+    }
+    .header-wrapper {
+      background: #e6f0f2;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+    .site__logo path {
+      animation: pulse 2s infinite ease-in-out;
+      transform-origin: center;
+      fill: #378f7b;
+    }
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+      }
+    }
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .menu-toggle div {
+      width: 25px;
+      height: 3px;
+      background: #378f7b;
+      margin: 4px 0;
+    }
+    nav {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    nav a {
+      color: var(--base-color);
+      text-decoration: none;
+    }
+    .balance {
+      font-weight: bold;
+      color: #2ecc71;
+    }
+    @media (max-width: 768px) {
+      nav {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: #e6f0f2;
+        padding: 1rem;
+        z-index: 99;
+      }
+      nav.show {
+        display: flex;
+      }
+      .menu-toggle {
+        display: flex;
+      }
+    }
+    main {
+      padding: 2rem;
+    }
+    .notice {
+      background: #e6f0f2;
+      padding: 1rem;
+      border-left: 4px solid #378f7b;
+      margin-bottom: 2rem;
+      color: var(--base-color);
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.3rem;
+      color: var(--base-color);
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid var(--input-border);
+      background: var(--input-bg);
+      color: var(--base-color);
+      border-radius: 4px;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--input-border-focus);
+      outline: none;
+    }
+    button {
+      background: #378f7b;
+      color: white;
+      padding: 0.7rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2ecc71;
+    }
+  </style>
+</head>
+<body>
+  <header class="header-wrapper">
+    <svg xmlns="http://www.w3.org/2000/svg" class="site__logo" width="55" height="75" viewBox="57.7 200.9 350.7 500">
+      <defs>
+        <linearGradient id="a" x1="0%" y1="0%" y2="0%">
+          <stop offset="0%" stop-color="#8ceabb"/>
+          <stop offset="100%" stop-color="#378f7b"/>
+        </linearGradient>
+      </defs>
+      <path fill="url(#a)" d="M215 214.9c-83.6 123.5-137.3 200.8-137.3 275.9 0 75.2 61.4 136.1 137.3 136.1s137.3-60.9 137.3-136.1c0-75.1-53.7-152.4-137.3-275.9z"/>
+    </svg>
+
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+
+    <nav id="mainNav">
+      <span class="balance">Balance: $0.00</span>
+      <a href="#">New Order</a>
+      <a href="#">Services</a>
+      <a href="#">Orders</a>
+      <a href="#">Add Funds</a>
+      <a href="#">Affiliate</a>
+      <a href="#">Tickets</a>
+      <a href="#">Account</a>
+      <a href="#">Logout</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="notice">
+      <p>Please create a site ticket for order issues. That’s the fastest way to get resolution.</p>
+      <p>Understanding our description | Understanding your order status | Why’s your order not delivering</p>
+    </div>
+
+    <form id="orderForm">
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category"></select>
+      </div>
+      <div class="form-group">
+        <label for="service">Service</label>
+        <select id="service"></select>
+      </div>
+      <div class="form-group">
+        <label for="link">Link</label>
+        <input type="url" id="link" required />
+      </div>
+      <div class="form-group">
+        <label for="quantity">Quantity</label>
+        <input type="number" id="quantity" min="1" required />
+      </div>
+      <div class="form-group">
+        <label>Average Time:</label>
+        <p id="avgTime">-</p>
+      </div>
+      <div class="form-group">
+        <label>Charge:</label>
+        <p id="charge">$0.00</p>
+      </div>
+      <button type="submit">Place Order</button>
+    </form>
+  </main>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    // Your Firebase config (replace with your real config)
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    // Dummy user uid for example, replace with actual auth.uid
+    let currentUserUID = null;
+
+    // Sample JSON structure for categories and services
+    // This would normally be imported or fetched from your server or static JSON file
+    const servicesData = {
+      "Social Media": [
+        { id: "insta_followers", name: "Instagram Followers", price: 0.01, avgTime: "1-2 days" },
+        { id: "facebook_likes", name: "Facebook Likes", price: 0.005, avgTime: "1 day" }
+      ],
+      "Streaming": [
+        { id: "youtube_views", name: "YouTube Views", price: 0.002, avgTime: "3-5 days" },
+        { id: "twitch_followers", name: "Twitch Followers", price: 0.015, avgTime: "1-3 days" }
+      ]
+    };
+
+    // UI Elements
+    const categorySelect = document.getElementById('category');
+    const serviceSelect = document.getElementById('service');
+    const quantityInput = document.getElementById('quantity');
+    const avgTimeDisplay = document.getElementById('avgTime');
+    const chargeDisplay = document.getElementById('charge');
+    const balanceDisplay = document.querySelector('.balance');
+    const orderForm = document.getElementById('orderForm');
+
+    let selectedService = null;
+    let userBalance = 0;
+
+    // Toggle mobile menu
+    function toggleMenu() {
+      document.getElementById("mainNav").classList.toggle("show");
+    }
+
+    // Populate category select
+    function loadCategories() {
+      categorySelect.innerHTML = '<option value="">Select Category</option>';
+      for (const category in servicesData) {
+        const opt = document.createElement('option');
+        opt.value = category;
+        opt.textContent = category;
+        categorySelect.appendChild(opt);
+      }
+    }
+
+    // Populate services based on category
+    function loadServices(category) {
+      serviceSelect.innerHTML = '<option value="">Select Service</option>';
+      if (!category || !servicesData[category]) return;
+      servicesData[category].forEach(service => {
+        const opt = document.createElement('option');
+        opt.value = service.id;
+        opt.textContent = service.name;
+        serviceSelect.appendChild(opt);
+      });
+    }
+
+    // Update service details and charge
+    function updateServiceDetails() {
+      const category = categorySelect.value;
+      const serviceId = serviceSelect.value;
+      if (!category || !serviceId) {
+        avgTimeDisplay.textContent = '-';
+        chargeDisplay.textContent = '$0.00';
+        selectedService = null;
+        return;
+      }
+      selectedService = servicesData[category].find(s => s.id === serviceId);
+      avgTimeDisplay.textContent = selectedService ? selectedService.avgTime : '-';
+      updateCharge();
+    }
+
+    // Update charge display based on quantity and service price
+    function updateCharge() {
+      if (!selectedService) {
+        chargeDisplay.textContent = '$0.00';
+        return;
+      }
+      const qty = parseInt(quantityInput.value, 10);
+      if (isNaN(qty) || qty <= 0) {
+        chargeDisplay.textContent = '$0.00';
+        return;
+      }
+      const total = qty * selectedService.price;
+      chargeDisplay.textContent = `$${total.toFixed(2)}`;
+    }
+
+    // Load user balance from Firebase
+    async function loadUserBalance() {
+      if (!currentUserUID) return;
+      try {
+        const userDoc = await db.collection('users').doc(currentUserUID).get();
+        if (userDoc.exists) {
+          userBalance = userDoc.data().balance || 0;
+          updateBalanceUI();
+        }
+      } catch (error) {
+        console.error("Error loading user balance:", error);
+      }
+    }
+
+    function updateBalanceUI() {
+      balanceDisplay.textContent = `Balance: $${userBalance.toFixed(2)}`;
+    }
+
+    // Deduct funds from user balance in Firebase
+    async function deductFunds(amount) {
+      if (!currentUserUID) throw new Error("User not logged in");
+      if (amount > userBalance) throw new Error("Insufficient balance");
+      try {
+        userBalance -= amount;
+        updateBalanceUI();
+        await db.collection('users').doc(currentUserUID).update({ balance: userBalance });
+      } catch (error) {
+        console.error("Error deducting funds:", error);
+        throw error;
+      }
+    }
+
+    // Place order handler
+    orderForm.addEventListener('submit', async e => {
+      e.preventDefault();
+
+      if (!selectedService) {
+        alert("Please select a service.");
+        return;
+      }
+
+      const link = document.getElementById('link').value.trim();
+      const quantity = parseInt(quantityInput.value, 10);
+
+      if (!link || quantity <= 0) {
+        alert("Please enter a valid link and quantity.");
+        return;
+      }
+
+      const totalCharge = quantity * selectedService.price;
+
+      if (totalCharge > userBalance) {
+        alert("Insufficient balance. Please add funds.");
+        return;
+      }
+
+      try {
+        // Deduct balance
+        await deductFunds(totalCharge);
+
+        // Save order to Firebase (example)
+        await db.collection('orders').add({
+          userId: currentUserUID,
+          category: categorySelect.value,
+          serviceId: selectedService.id,
+          link,
+          quantity,
+          totalCharge,
+          status: "pending",
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        alert("Order placed successfully!");
+
+        // Reset form
+        orderForm.reset();
+        avgTimeDisplay.textContent = '-';
+        chargeDisplay.textContent = '$0.00';
+
+        // TODO: Send Telegram notification for new order here
+        // Example: call your backend API to send Telegram message
+
+      } catch (error) {
+        alert("Error placing order: " + error.message);
+        console.error(error);
+      }
+    });
+
+    // Event listeners to update UI dynamically
+    categorySelect.addEventListener('change', () => {
+      loadServices(categorySelect.value);
+      avgTimeDisplay.textContent = '-';
+      chargeDisplay.textContent = '$0.00';
+      selectedService = null;
+    });
+
+    serviceSelect.addEventListener('change', updateServiceDetails);
+    quantityInput.addEventListener('input', updateCharge);
+
+    // Firebase auth state listener (example to get current user UID)
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        currentUserUID = user.uid;
+        loadUserBalance();
+      } else {
+        currentUserUID = null;
+        userBalance = 0;
+        updateBalanceUI();
+      }
+    });
+
+    // Initial load
+    loadCategories();
+  </script>
+</body>
+</html>

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Loading...</title>
   <style>
     :root {
-      --base-bgcolor: #354152;
-      --base-color: #7e8ba3;
+      --base-bgcolor: #ffffff; /* changed to white */
+      --base-color: #354152;   /* darker text for white bg */
       --base-font-weight: 300;
       --base-font-size: 1rem;
       --base-line-height: 1.5;
@@ -45,7 +45,7 @@
     .loading-text {
       margin-top: 20px;
       font-size: 1.2rem;
-      color: #8ceabb;
+      color: #378f7b; /* teal color for accent */
     }
   </style>
 </head>
@@ -65,8 +65,8 @@
 
   <script>
     setTimeout(() => {
-      window.location.href = "dashboard.html";
-    }, 10000); // 8 seconds
+      window.location.href = "Panel.html";
+    }, 5000); // 5 seconds
   </script>
 
 </body>

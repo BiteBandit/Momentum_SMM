@@ -6,23 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
-      --base-bgcolor: #354152;
-      --base-color: #7e8ba3;
+      --base-bgcolor: #ffffff;
+      --base-color: #354152;
       --base-font-weight: 300;
       --base-font-size: 1rem;
       --base-line-height: 1.5;
       --base-font-family: 'Helvetica Neue', sans-serif;
-      --input-bg: #2c3a4a;
-      --input-border: #4a5a6a;
+      --input-bg: #f0f0f0;
+      --input-border: #c0c0c0;
       --input-border-focus: #378f7b;
       --error-color: #e74c3c;
       --success-color: #2ecc71;
     }
-
     * {
       box-sizing: border-box;
     }
-
     body {
       margin: 0;
       min-height: 100vh;
@@ -34,37 +32,32 @@
       align-items: center;
       padding: 20px;
     }
-
     .register {
-      background: #2c3a4a;
+      background: #fff;
       padding: 30px 40px;
       border-radius: 8px;
       width: 360px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-
     .register svg.site__logo {
       display: block;
       margin: 0 auto 15px auto;
       fill: url(#a);
     }
-
     .register h2 {
       text-align: center;
       margin-bottom: 25px;
       font-weight: 600;
+      color: var(--base-color);
     }
-
     form {
       display: flex;
       flex-direction: column;
       gap: 15px;
     }
-
     .form__field {
       position: relative;
     }
-
     input[type="text"],
     input[type="email"],
     input[type="password"],
@@ -74,7 +67,7 @@
       background: var(--input-bg);
       border: 1.5px solid var(--input-border);
       border-radius: 5px;
-      color: #eee;
+      color: var(--base-color);
       font-size: 1rem;
       transition: border-color 0.3s ease;
     }
@@ -85,17 +78,16 @@
       border-color: var(--input-border-focus);
       outline: none;
     }
-
     .eye-toggle {
       position: absolute;
       right: 12px;
-      top: 50%;
+      top: 35%;
       transform: translateY(-50%);
       cursor: pointer;
       font-size: 20px;
       user-select: none;
+      color: var(--base-color);
     }
-
     button {
       padding: 12px;
       background: var(--input-border-focus);
@@ -107,23 +99,25 @@
       cursor: pointer;
       transition: background 0.3s ease;
     }
-    button:hover {
+    button:hover:not(:disabled) {
       background: #2e665b;
     }
-
+    button:disabled {
+      background: #7ca89c;
+      cursor: not-allowed;
+    }
     .error-msg {
       color: var(--error-color);
       font-size: 0.85rem;
       margin-top: 4px;
+      min-height: 18px;
     }
-
     .success-msg {
       color: var(--success-color);
       font-size: 0.9rem;
       text-align: center;
       margin-bottom: 10px;
     }
-
     .redirect-login {
       text-align: center;
       margin-top: 15px;
@@ -141,61 +135,46 @@
   </style>
 </head>
 <body>
-
   <div class="register">
-
     <svg xmlns="http://www.w3.org/2000/svg" class="site__logo" width="56" height="84" viewBox="77.7 214.9 274.7 412"><defs><linearGradient id="a" x1="0%" y1="0%" y2="0%"><stop offset="0%" stop-color="#8ceabb"/><stop offset="100%" stop-color="#378f7b"/></linearGradient></defs><path fill="url(#a)" d="M215 214.9c-83.6 123.5-137.3 200.8-137.3 275.9 0 75.2 61.4 136.1 137.3 136.1s137.3-60.9 137.3-136.1c0-75.1-53.7-152.4-137.3-275.9z"/></svg>
-
     <h2>Create Your Momentum SMM Account</h2>
-
     <form id="registerForm" novalidate>
-
       <div class="form__field">
         <input id="username" type="text" placeholder="Username" required />
         <div class="error-msg" id="usernameError"></div>
       </div>
-
       <div class="form__field">
         <input id="email" type="email" placeholder="Email (example@mail.com)" required />
         <div class="error-msg" id="emailError"></div>
       </div>
-
       <div class="form__field">
         <input id="phone" type="tel" placeholder="Phone Number" required />
         <div class="error-msg" id="phoneError"></div>
       </div>
-
       <div class="form__field">
         <input id="password" type="password" placeholder="Password" required />
         <span class="eye-toggle" id="togglePassword">👁️</span>
         <div class="error-msg" id="passwordError"></div>
       </div>
-
       <div class="form__field">
         <input id="confirmPassword" type="password" placeholder="Confirm Password" required />
         <span class="eye-toggle" id="toggleConfirmPassword">👁️</span>
         <div class="error-msg" id="confirmPasswordError"></div>
       </div>
-
       <div class="error-msg" id="firebaseError"></div>
-
       <button type="submit" id="submitBtn">Register</button>
       <div class="success-msg" id="successMsg"></div>
     </form>
-
     <div class="redirect-login">
       Already have an account? <a href="index.html">Log In</a>
     </div>
   </div>
 
-  <!-- Firebase SDK CDN -->
   <script type="module">
-    // Firebase imports using CDN and modular SDK
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
     import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-    // Your Firebase config (replace with your own)
     const firebaseConfig = {
       apiKey: "AIzaSyBExQ1NNsKbJfoLrj8X6CSOf0HAX6psh2Y",
       authDomain: "smm-panel-ec113.firebaseapp.com",
@@ -205,12 +184,10 @@
       appId: "1:358406430490:web:8fe97be0542fce435896a3"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Elements
     const registerForm = document.getElementById("registerForm");
     const usernameInput = document.getElementById("username");
     const emailInput = document.getElementById("email");
@@ -222,33 +199,33 @@
     const firebaseError = document.getElementById("firebaseError");
     const successMsg = document.getElementById("successMsg");
 
-    // Error fields
     const usernameError = document.getElementById("usernameError");
     const emailError = document.getElementById("emailError");
     const phoneError = document.getElementById("phoneError");
     const passwordError = document.getElementById("passwordError");
     const confirmPasswordError = document.getElementById("confirmPasswordError");
 
-    // Eye toggle function
-    function toggleVisibility(input, toggleBtn) {
+    function toggleVisibility(input, toggleIcon) {
       if (input.type === "password") {
         input.type = "text";
-        toggleBtn.textContent = "🙈";
+        toggleIcon.textContent = "🙈";
       } else {
         input.type = "password";
-        toggleBtn.textContent = "👁️";
+        toggleIcon.textContent = "👁️";
       }
     }
 
-    togglePassword.addEventListener("click", () => {
-      toggleVisibility(passwordInput, togglePassword);
-    });
+    togglePassword.addEventListener("click", () => toggleVisibility(passwordInput, togglePassword));
+    toggleConfirmPassword.addEventListener("click", () => toggleVisibility(confirmPasswordInput, toggleConfirmPassword));
 
-    toggleConfirmPassword.addEventListener("click", () => {
-      toggleVisibility(confirmPasswordInput, toggleConfirmPassword);
-    });
+    function validateEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
 
-    // Clear all errors
+    function validatePhone(phone) {
+      return /^\+?\d{7,15}$/.test(phone);
+    }
+
     function clearErrors() {
       usernameError.textContent = "";
       emailError.textContent = "";
@@ -259,95 +236,65 @@
       successMsg.textContent = "";
     }
 
-    // Simple email validation
-    function isValidEmail(email) {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    }
-
-    // Simple phone validation (digits only, 7-15 length)
-    function isValidPhone(phone) {
-      return /^\d{7,15}$/.test(phone);
-    }
-
     registerForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       clearErrors();
 
-      // Get values trimmed
-      const username = usernameInput.value.trim();
-      const email = emailInput.value.trim();
-      const phone = phoneInput.value.trim();
-      const password = passwordInput.value;
-      const confirmPassword = confirmPasswordInput.value;
+      let valid = true;
 
-      let hasError = false;
-
-      if (username.length < 3) {
+      if (usernameInput.value.trim().length < 3) {
         usernameError.textContent = "Username must be at least 3 characters.";
-        hasError = true;
+        valid = false;
       }
 
-      if (!isValidEmail(email)) {
-        emailError.textContent = "Please enter a valid email address.";
-        hasError = true;
+      if (!validateEmail(emailInput.value.trim())) {
+        emailError.textContent = "Please enter a valid email.";
+        valid = false;
       }
 
-      if (!isValidPhone(phone)) {
-        phoneError.textContent = "Phone must be digits only (7-15 chars).";
-        hasError = true;
+      if (!validatePhone(phoneInput.value.trim())) {
+        phoneError.textContent = "Please enter a valid phone number.";
+        valid = false;
       }
 
-      if (password.length < 6) {
+      if (passwordInput.value.length < 6) {
         passwordError.textContent = "Password must be at least 6 characters.";
-        hasError = true;
+        valid = false;
       }
 
-      if (password !== confirmPassword) {
+      if (passwordInput.value !== confirmPasswordInput.value) {
         confirmPasswordError.textContent = "Passwords do not match.";
-        hasError = true;
+        valid = false;
       }
 
-      if (hasError) return;
+      if (!valid) return;
 
-      // Disable submit btn while processing
-      const submitBtn = e.target.querySelector("button[type='submit']");
+      // Disable submit to prevent multiple clicks
+      const submitBtn = document.getElementById("submitBtn");
       submitBtn.disabled = true;
-      submitBtn.textContent = "Registering...";
 
       try {
-        // Create user in Firebase Auth
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await createUserWithEmailAndPassword(auth, emailInput.value.trim(), passwordInput.value);
         const user = userCredential.user;
 
-        // Save extra user info in Firestore
         await setDoc(doc(db, "users", user.uid), {
-          username: username,
-          email: email,
-          phone: phone,
-          createdAt: serverTimestamp()
+          username: usernameInput.value.trim(),
+          email: emailInput.value.trim(),
+          phone: phoneInput.value.trim(),
+          createdAt: serverTimestamp(),
         });
 
-        successMsg.textContent = "Registration successful! Redirecting...";
-
-        // Redirect after short delay
+        successMsg.textContent = "Account created successfully! Redirecting...";
+        // Optionally redirect after a delay
         setTimeout(() => {
-          window.location.href = "Loading.html";
-        }, 2000);
+          window.location.href = "index.html";
+        }, 3000);
 
       } catch (error) {
+        // Your requested mature error message here:
+        firebaseError.textContent = "Registration failed:This email is already registered. Please log in or use a different email.";
+      } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = "Register";
-
-        // Firebase error handling with nicer messages
-        if (error.code === "auth/email-already-in-use") {
-          firebaseError.textContent = "This email is already registered.";
-        } else if (error.code === "auth/invalid-email") {
-          firebaseError.textContent = "Invalid email address.";
-        } else if (error.code === "auth/weak-password") {
-          firebaseError.textContent = "Password is too weak.";
-        } else {
-          firebaseError.textContent = "Registration failed. Try again later.";
-        }
       }
     });
   </script>
